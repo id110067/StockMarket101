@@ -28,14 +28,14 @@
     -   The investor will be asked to login/create an account with name<br>
         and portfolio account number as input
 
-    -   New player starts with virtual cash of 100,000 HKD in his/her
-        > portfolio account, while an already registered user is
-        > redirected to his account to view all his previous activity
+    -   New player starts with virtual cash of 100,000 HKD in his/her<br>
+        portfolio account, while an already registered user is<br>
+        redirected to his account to view all his previous activity<br>
 
     -   There will be stocks of 5 companies
 
-    -   Player gets to experiment with these stocks by placing investing
-        > in virtual stocks
+    -   Player gets to experiment with these stocks by placing investing<br>
+        in virtual stocks
 
     -   As the day begins:
 
@@ -61,12 +61,12 @@
 
 <!-- -->
 
--   Then, the investor will be redirected to the home page and the
-    > process continues. If he does not want to invest further he can
-    > simply select no and select logout option from the drop down menu.
+-   Then, the investor will be redirected to the home page and the<br>
+    process continues. If he does not want to invest further he can<br>
+    simply select no and select logout option from the drop down menu.<br>
 
-> If no, i.e., player chooses not to invest, the following menu will be
-> displayed to assist the player/investor:
+> If no, i.e., player chooses not to invest, the following menu will be<br>
+  displayed to assist the player/investor:
 >
 > --------------------------------------------------------------------------------------
 
