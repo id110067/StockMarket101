@@ -4,6 +4,9 @@
 > *Virtual Stock Simulation Game*
 >
 > ***Introduction:***
+> 
+> *Group members: Goli Smaran (3035830703), Mohammad Abdur Rahman (3035756579)
+> *Group no: 78*
 >
 > Investing in stocks is a very important financial strategy in today’s
 > world, as it enables one to grow with the economy, also to make money
