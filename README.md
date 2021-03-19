@@ -25,8 +25,8 @@
 
 -   Description of our game and introduce the game rules
 
-    -   The investor will be asked to login/create an account with name
-        > and portfolio account number as input
+    -   The investor will be asked to login/create an account with name<br>
+        and portfolio account number as input
 
     -   New player starts with virtual cash of 100,000 HKD in his/her
         > portfolio account, while an already registered user is
