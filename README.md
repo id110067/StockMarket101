@@ -85,7 +85,7 @@
 6\. Logout
 >
 
-**Features incorporating coding requirements:**
+>**Features incorporating coding requirements:**
 
 1.  *Generation of random game sets or events:*
 
