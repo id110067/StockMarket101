@@ -68,7 +68,6 @@
 > If no, i.e., player chooses not to invest, the following menu will be<br>
   displayed to assist the player/investor:
 >
-> --------------------------------------------------------------------------------------
 
 1\. See available funds
 
