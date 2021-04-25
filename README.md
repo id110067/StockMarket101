@@ -22,7 +22,8 @@ Through virtual world simulation, we want to give our players the experience req
                                                            
                                                            (or)
                                                            
-             *   The "Personal account number" is set to 1000 at first. So whenever a new user creates an account, the "Personal account number" is incremented by                  1(i.e., 1001, 1002..etc)
+             *   The "Personal account number" is set to 1000 at first. So whenever a new user creates an account, 
+                 the "Personal account number" is incremented by 1(i.e., 1001, 1002..etc)
 
           *   login into an existing account with “name” and “Personal account number” as input \
    
