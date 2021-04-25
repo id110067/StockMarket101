@@ -293,3 +293,283 @@ void StockProfile::sellStock(){
 	}
 }
 
+// Used for instantiating buy/sell stock 
+void StockProfile::buySellStock(){
+	char temp;
+	int c, index = 0, value;
+	ifstream read;
+	string line, name;
+	// Display all the stock names and current value of the stock
+	read.open("stockData.txt");
+	cout << "************************" << endl;
+	cout << "Name    Current_Price" << endl;
+	cout << "************************" << endl;
+	while (getline(read, line)) {
+		istringstream word(line);
+		word >> name >> value;
+		cout << name << "        " << value << endl;
+		index += 1;
+	}
+	cout << "************************" << endl;
+	read.close();
+	
+	// verify whether the user wants to buy or sell stocks and call appropriately
+	cout << "Do you want buy(1) or sell(0) stock: ";
+	cin >> c;
+	if (c == 1) {
+		buyStock();
+	}
+	else if (c == 0) {
+		sellStock();
+	}
+	else {
+		cout << "Please choose a valid option..." << endl;
+	}
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Return Personal Account Number
+int StockProfile::getPAN(){
+	return curr.pan;
+}
+// Display all the stocks in the user portfolio with quantity
+void StockProfile::portfolioStocks(){
+	ifstream read;
+	string line;
+	read.open("./RecordDetails/Record_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	cout << "************************" << endl;
+	cout << "Name    Quantity" << endl;
+	cout << "************************" << endl;
+	while (getline(read, line)) {
+		string name, qty;
+		istringstream word(line);
+		word >> name >> qty;
+		cout << name << "        " << qty << endl;
+	}
+	read.close();
+	cout << "************************" << endl;
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Input: get the name of stock, quantity and current price of stock
+// Used for adding a new stock transaction in user account
+void StockProfile::addTransaction(string name, int quantity, float curr_price){
+	ofstream update;
+	time_t curr_time = time(0);
+	
+	// Append date, time, stock name, quantity, current price in user transaction file
+	tm *ltm = localtime(&curr_time);
+	update.open("./RecordDetails/Tran_" + to_string(curr.pan) + "_" + curr.name + ".txt", ios::out | ios::app);
+	update << ltm->tm_mday << "/" << (ltm->tm_mon) + 1 << "/" << (ltm->tm_year) + 1900 << " " 
+			<< ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec << " "
+			<< name << " " << quantity << " " << curr_price << endl;
+	update.close();
+}
+
+// Input: get the transaction index
+// Used for removing any specified transaction index from file
+void StockProfile::removeTransaction(int pos){
+	ifstream read;
+	ofstream update;
+	string data, line, name;
+	int loc = 1, qty, pro_loss;
+	
+	// goto the user transaction file and search for specified index i.e., 'pos'
+	read.open("./RecordDetails/Tran_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	while (getline(read, line)) {
+		if (loc == pos) {
+			string date, time;
+			float buy_price;
+			istringstream word(line);
+			word >> date >> time >> name >> qty >> buy_price;
+			int s_index = getIndex(name);
+			pro_loss = (curr_value[s_index] - buy_price) * qty;
+			curr.profit_loss += pro_loss; // update the profit_loss of the user in his profile
+			curr.balance += (qty * curr_value[s_index]); // add the new amount in user balance
+			updateProfile(); // update the user profile file i.e., 'details.txt'
+			loc += 1;
+			continue;
+		}
+		data += (line + "\n");
+		loc += 1;
+	}
+	read.close();
+	
+	update.open("./RecordDetails/Tran_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	update << data;
+	update.close();
+	
+	data.clear();
+	string n;
+	int q;
+	// Remove those stock quantities from the user stock portfolio
+	read.open("./RecordDetails/Record_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	while (getline(read, line)) {
+		istringstream word(line);
+		word >> n >> q;
+		if (n == name) {
+			data += (name + " " + to_string(q-qty) + "\n");
+		}
+		else {
+			data += (line+"\n");
+		}
+	}
+	read.close();
+	
+	update.open("./RecordDetails/Record_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	update << data;
+	update.close();
+	cout << "****************************************************************************" << endl;
+	cout << "'"<< name << "' stock sold from your portfolio and made a profit/loss of " << pro_loss << endl;
+	cout << "****************************************************************************" << endl;
+}
+
+// Display all the transaction made by the user
+void StockProfile::viewTransactionHistory(){
+	ifstream read;
+	string line;
+	read.open("./RecordDetails/Tran_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	cout << "*************************************************" << endl;
+	cout << "Date        Time    Name   Quantity   Buy_Price  " << endl;
+	cout << "*************************************************" << endl;
+	while (getline(read, line)) {
+		string name, date, time, qty, buy_price;
+		istringstream word(line);
+		word >> date >> time >> name >> qty >> buy_price;
+		cout << date << "  " << time << "   " << name << "       " << qty << "        " << buy_price << endl;	
+	}
+	cout << "*************************************************" << endl;
+	read.close();
+	
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Display all the minimum and maximum value for each of the stock
+void StockProfile::minMaxStockValues(){
+	for (int i = 0; i<5; i++) {
+		cout << "**************************" << endl;
+		cout << stock_name[i] << endl;
+		cout << "**************************" << endl;
+		cout << "Minimum value : " << min_value[i] << endl;
+		cout << "Maximum value : " << max_value[i] << endl;
+	}
+	cout << "**************************" << endl;
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Used for displaying profits for each transaction made so far
+void StockProfile::showProfits(){
+	ifstream read;
+	
+	string line, name, date, time;
+	int i, qty, buy_price;;
+	
+	// Display all transactions along with profit/loss for each one for them
+	read.open("./RecordDetails/Tran_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	cout << "****************************************************************************" << endl;
+	cout << "Date        Time    Name   Quantity   Buy_Price   Current_Price   Profit/Loss" << endl;
+	cout << "****************************************************************************" << endl;
+	while (getline(read, line)) {
+		istringstream word(line);
+		word >> date >> time >> name >> qty >> buy_price;
+		int s_index = getIndex(name);
+		int total_profit = (curr_value[s_index] - buy_price) * qty;
+		cout << date << "  " << time << "   " << name << "       " << qty << "        " << 
+				buy_price << "           " << curr_value[s_index] << "            " << total_profit << endl;
+	}
+	cout << "****************************************************************************" << endl;
+	read.close();
+	
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Used for displaying profits for each transaction made so far along with Net profit/loss
+void StockProfile::netProfitLoss(){
+	ifstream read;
+	
+	string line, name, date, time;
+	int i, qty, buy_price;
+	int total_profit = 0, sum_total = 0;
+	
+	read.open("./RecordDetails/Tran_" + to_string(curr.pan) + "_" + curr.name + ".txt");
+	cout << "****************************************************************************" << endl;
+	cout << "Date        Time    Name   Quantity   Buy_Price   Current_Price   Profit/Loss" << endl;
+	cout << "****************************************************************************" << endl;
+	while (getline(read, line)) {
+		istringstream word(line);
+		word >> date >> time >> name >> qty >> buy_price;
+		int s_index = getIndex(name);
+		total_profit = ((curr_value[s_index] - buy_price) * qty);
+		sum_total += total_profit;
+		cout << date << "  " << time << "   " << name << "       " << qty << "        " << 
+					buy_price << "           " << curr_value[s_index] << "            " << total_profit << endl;
+	}	
+	cout << "****************************************************************************" << endl;
+	cout << "Net Profit/Loss for available stocks : " << sum_total << endl;
+	cout << "****************************************************************************" << endl;
+	read.close();
+	
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Display the user profile details
+void StockProfile::displayProfile(){
+	cout << "**************************************" << endl;
+	cout << "Name : " << curr.name << endl;
+	cout << "Personal Account Number : " << curr.pan << endl;
+	cout << "Available Balance (in HKD): " << curr.balance << endl;
+	cout << "Overall Profit/Loss made so far : " << curr.profit_loss << endl;
+	cout << "**************************************" << endl;
+	cout << "PRESS ANY KEY AND HIT ENTER TO RETURN TO MAIN MENU...";
+	cin.get();
+	cin.get();
+}
+
+// Update the stock values and exit the game
+void StockProfile::logout(){
+	ofstream update;
+	update.open("stockData.txt");
+	
+	for (int i = 0; i < 5; i++) {
+		int temp = (1000 + (rand() % 500));
+		if (temp > max_value[i]) {
+			max_value[i] = temp;
+		}
+		if (temp < min_value[i]) {
+			min_value[i] = temp;
+		}
+		update << stock_name[i] << " " << temp << endl;
+	}
+	update.close();
+		
+	string data;
+	for (int i = 0; i < 5; i++){
+		data += (to_string(min_value[i]) + " ");
+	}
+	data +=  "\n";
+	for (int i=0; i<5; i++){
+		data += (to_string(max_value[i]) + " ");
+	}
+	data += "\n";
+	
+	update.open("./RecordDetails/Min_Max_" + to_string(curr.pan) + "_" + curr.name + ".txt", ios::out);
+	update << data << endl;	
+	update.close();
+	
+	cout << "**********************************************" << endl;
+	cout << "Bye " << curr.name << "! Hope to see you soon!" << endl;
+	cout << "**********************************************" << endl;
+	exit(1);
+}
