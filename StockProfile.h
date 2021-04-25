@@ -28,3 +28,21 @@ class StockProfile {
 		StockProfile(string name);
 		StockProfile(string name, int pan);
 		void displayAllStocks();
+	        void buySellStock();
+		void buyStock();
+		void sellStock();
+		void updateProfile();
+		void portfolioStocks();
+		void viewTransactionHistory();
+		void addTransaction(string name, int quantity, float curr_price);
+		void removeTransaction(int pos);
+		int getIndex(string name);
+		string getName();
+		void minMaxStockValues();
+		void showProfits();
+		void netProfitLoss();
+		void displayProfile();
+		void logout();
+		int getPAN();
+};
+#endif
