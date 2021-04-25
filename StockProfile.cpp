@@ -48,7 +48,7 @@ StockProfile::StockProfile(string name){
 	update.close();
 	
 	// Create his own stock profile with all stocks as '0'
-  update.open("./RecordDetails/Record_" + to_string(base) + "_" + name + ".txt", ios::out|ios::app);
+        update.open("./RecordDetails/Record_" + to_string(base) + "_" + name + ".txt", ios::out|ios::app);
 	for (int i = 0; i < 5; i++) {
 		update << stock_name[i] << " " << 0 << endl;
 	}
